@@ -5,56 +5,15 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React, { useState } from 'react';
+import {SafeAreaView, useColorScheme, View, Alert, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Button from './src/component/Button/Button';
+import Card from './src/component/Card/Card';
+import Modalitem from './src/component/Modal/Modalitem';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
+ 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -62,56 +21,97 @@ function App(): React.JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  return (
+  const handleDefaultButtonPress = () => {
+    Alert.alert('Default Button Pressed');
+  };
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleConfirm = () => {
+    console.log('Confirmed');
+    setModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    console.log('Cancelled');
+    setModalVisible(false);
+  };
+
+  return ( 
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+      <View
+        style={{
+          padding: 10,
+          borderColor: 'lightgrey',
+          borderWidth: 1,
+          margin: 10,
+        }}>
+        <Button label="default button"         onPress={handleDefaultButtonPress}
+        />
+        <Button label="rounded button" backgroundColor="#02bfe7" borderColor='#02bfe7' 
+        // raised= {true}
+        onPress={handleDefaultButtonPress}
+        />
+
+      </View>
+      <View style={styles.cardRow}>
+      <Card
+        text1="First Card"
+        text2="Larger Text"
+        text3="Medium Text"
+        text1Size={10}
+        text2Size={15}
+        text3Size={12}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+      <Card
+        text1="First Card"
+        text2="Larger Text"
+        text3="Medium Text"
+        text1Size={10}
+        text2Size={15}
+        text3Size={12}
+      />
+      <Card
+        text1="First Card"
+        text2="Larger Text"
+        text3="Medium Text"
+        text1Size={10}
+        text2Size={15}
+        text3Size={12}
+      />
+      </View>
+      <View>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <Text style={styles.modalText}>Show Modal</Text>
+
+        </TouchableOpacity>
+      <Modalitem
+          visible={modalVisible}
+          message="Are you sure you want to proceed?"
+          confirmButton={{ title: 'Confirm', onPress: handleConfirm }}
+          cancelButton={{ title: 'Cancel', onPress: handleCancel }}
+        />
+
+        {/* <Modalitem
+          visible={modalVisible}
+          message="Action completed successfully."
+          confirmButton={{ title: 'Okay', onPress: handleConfirm }}
+        /> */}
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  cardRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
+  modalText: {
     fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+    color: '#007bff',
+    textDecorationLine: 'underline',
   },
 });
 
